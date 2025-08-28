@@ -1,0 +1,384 @@
+/* 1. VARIABLES & THEME SETUP */
+:root {
+    --accent-blue: #00A3FF;
+    --font-family: 'Poppins', sans-serif;
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+}
+
+.dark-theme {
+    --bg-color: #101010;
+    --surface-color: #1A1A1A;
+    --primary-color: #2C2C2C;
+    --text-color: #F0F0F0;
+    --text-muted: #888888;
+    --border-color: #333333;
+}
+
+.light-theme {
+    --bg-color: #F0F2F5;
+    --surface-color: #FFFFFF;
+    --primary-color: #E4E6EB;
+    --text-color: #1C1E21;
+    --text-muted: #65676B;
+    --border-color: #DCDFE4;
+}
+
+/* 2. GENERAL & RESET STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: dark light;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    height: 100%;
+}
+
+button, input {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    border: none;
+}
+
+/* 3. LAYOUT */
+.preview-area {
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+    background: repeating-conic-gradient(var(--primary-color) 0% 25%, var(--bg-color) 0% 50%) 50% / 30px 30px;
+}
+
+#image-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    display: none; /* Hidden until image is loaded */
+}
+
+#upload-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    text-align: center;
+    background-color: var(--surface-color);
+}
+
+#upload-prompt .material-symbols-outlined {
+    font-size: 48px;
+    color: var(--accent-blue);
+}
+
+.tools-panel {
+    grid-row: 2;
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    overflow-y: auto;
+}
+
+.tool-content {
+    padding: 1rem;
+}
+
+/* 4. COMPONENT STYLES */
+
+/* Section & Grouping */
+.tool-section {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.tool-section:first-child {
+    padding-top: 0.5rem;
+}
+.tool-section:last-child {
+    border-bottom: none;
+}
+.tool-section h3 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+.control-group {
+    margin-bottom: 1.5rem;
+}
+.control-group > label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+.tooltip {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Buttons */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+    gap: 8px;
+}
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.button-grid button,
+.button-group button {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.button-grid button:hover,
+.button-group button:hover {
+    background-color: #333;
+}
+.button-grid button.active,
+.button-group button.active {
+    background-color: var(--accent-blue);
+    color: #fff;
+}
+
+/* Sliders */
+.slider-control {
+    margin-bottom: 0.5rem;
+}
+.slider-control label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 0 5px;
+    margin-bottom: 0.5rem;
+}
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--primary-color);
+    outline: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--text-color);
+    border-radius: 50%;
+    border: 3px solid var(--surface-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* Inputs & Forms */
+.text-input {
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 12px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid transparent;
+}
+.text-input:focus {
+    border-color: var(--accent-blue);
+}
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent-blue);
+}
+
+/* Accordion */
+details {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+summary {
+    font-weight: 500;
+    padding: 12px;
+    cursor: pointer;
+    background-color: var(--primary-color);
+}
+.details-content {
+    padding: 1rem;
+}
+
+/* Color Controls */
+.color-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+input[type="color"] {
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    background-color: transparent;
+}
+.preset-colors {
+    display: flex;
+    gap: 8px;
+}
+.color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+}
+
+/* Footer & Action Buttons */
+.footer-actions {
+    padding: 1.5rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.primary-btn, .action-btn {
+    padding: 12px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+.primary-btn {
+    background-color: var(--accent-blue);
+    color: #fff;
+}
+.action-btn {
+    background-color: var(--primary-color);
+}
+.footer-note {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Add this to styles.css, for example in the "Color Controls" section */
+#color-picker-parent {
+  position: relative; /* This is crucial for positioning the popup */
+}
+
+/* #color-picker-trigger {
+  width: 144px;
+  height: 44px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  background-color: #FFFFFF; 
+} */
+
+/* Add this to styles.css */
+.color-picker-container {
+  flex-grow: 5; /* Allows the container to expand */
+  position:relative ;
+}
+
+
+/* Add this to your styles.css file */
+.picker-trigger-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 0 12px;
+    height: 44px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.2s;
+}
+.picker-trigger-wrapper:hover {
+    border-color: var(--accent-blue);
+}
+.picker-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.pcr-button {
+    /* Overrides for the Pickr button */
+    width: 28px !important;
+    height: 28px !important;
+    border: 2px solid var(--border-color) !important;
+}
+
+/* 5. DESKTOP RESPONSIVE STYLES */
+@media (min-width: 900px) {
+    .app-container {
+        grid-template-columns: 1fr 380px;
+        grid-template-rows: 1fr;
+    }
+    .preview-area {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .tools-panel {
+        grid-column: 2;
+        grid-row: 1;
+        border-top: none;
+        border-left: 1px solid var(--border-color);
+    }
+    .tool-content {
+        padding: 1rem 1.5rem;
+    }
+}
