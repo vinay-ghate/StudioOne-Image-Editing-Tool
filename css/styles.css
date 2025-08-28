@@ -383,6 +383,31 @@ input[type="color"] {
     }
 }
 
+/* 6. MOBILE RESPONSIVE STYLES */
+@media (max-width: 768 px) {
+    .app-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-area {
+        order: 1; /* content first */
+        width: 100%;
+    }
+
+    .tools-panel {
+        order: 2; /* tools below */
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .tool-content {
+        padding: 0.75rem 1rem; /* smaller padding for mobile */
+    }
+}
+
+
 /* --- Footer Styles --- */
 footer {
     padding: 1.5rem;
