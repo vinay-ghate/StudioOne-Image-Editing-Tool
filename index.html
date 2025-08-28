@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickEdit Studio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
+    <link rel="stylesheet" href="css/styles4.css">
+    <script src="js/script4.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <main class="preview-area">
+            <div id="upload-prompt">
+                <span class="material-symbols-outlined">upload</span>
+                <h2>Load Your Image</h2>
+                <p>Drag and drop an image or click to browse.</p>
+                <label for="image-loader" class="primary-btn">Choose Image</label>
+                <input type="file" id="image-loader" accept="image/*" hidden>
+            </div>
+            <canvas id="image-canvas"></canvas>
+        </main>
+
+        <aside class="tools-panel">
+            <div class="tool-content">
+                
+                <div class="tool-section">
+                    <h3>Image Settings</h3>
+                    
+                    <div class="control-group">
+                        <label for="borderSize">Border: <span id="borderSize-value-display">0%</span></label>
+                        <input type="range" id="borderSize" min="0" max="50" value="0">
+                        <p class="tooltip">Adjust the border thickness around your image from 0 to 50 percent of the shorter side.</p>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Aspect Ratio</label>
+                        <div class="button-grid" id="aspect-ratio-btns">
+                            <button data-ratio="original" class="active" title="Maintains your image's original proportions">Original</button>
+                            <button data-ratio="1/1" title="1:1 aspect ratio, perfect for Instagram posts">1:1</button>
+                            <button data-ratio="2/3" title="2:3 aspect ratio, ideal for Pinterest pins">2:3</button>
+                            <button data-ratio="3/4" title="3:4 aspect ratio, great for portrait photos">3:4</button>
+                            <button data-ratio="4/5" title="4:5 aspect ratio, ideal for Instagram portrait posts">4:5</button>
+                            <button data-ratio="9/16" title="9:16 aspect ratio, perfect for Stories and Reels">9:16</button>
+                            <button data-ratio="3/2" title="3:2 aspect ratio, classic landscape format">3:2</button>
+                            <button data-ratio="4/3" title="4:3 aspect ratio, standard photo format">4:3</button>
+                            <button data-ratio="16/9" title="16:9 aspect ratio, perfect for YouTube thumbnails and videos">16:9</button>
+                            <button data-ratio="custom" title="Custom aspect ratio, enter your own width:height ratio">Custom</button>
+                        </div>
+                    </div>
+
+                    <details class="control-group" open>
+                        <summary>Advanced Settings</summary>
+                        <div class="details-content">
+                            <div class="control-group">
+                                <label>Border Color</label>
+                                <div class="picker-trigger-wrapper" id="picker-trigger-wrapper" title="Select Border Color">
+                                    <span class="picker-label">Color</span>
+                                    <div class="color-picker-container"></div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label>Preset Colors</label>
+                                <div class="preset-colors" id="preset-colors">
+                                    <button class="color-swatch" data-color="#FFFFFF" title="White" style="background: #FFFFFF;"></button>
+                                    <button class="color-swatch" data-color="#000000" title="Black" style="background: #000000;"></button>
+                                    <button class="color-swatch" data-color="#CCCCCC" title="Light Gray" style="background: #CCCCCC;"></button>
+                                    <button class="color-swatch" data-color="#808080" title="Gray" style="background: #808080;"></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </details>
+                </div>
+
+                <div class="control-group">
+                            <label>Filters</label>
+                            <div class="slider-control">
+                                <label for="saturate"><span>Saturation</span><span id="saturate-value-display">100%</span></label>
+                                <input type="range" id="saturate" min="0" max="200" value="100">
+                            </div>
+                            <div class="slider-control">
+                                <label for="grayscale"><span>Grayscale</span><span id="grayscale-value-display">0%</span></label>
+                                <input type="range" id="grayscale" min="0" max="100" value="0">
+                            </div>
+                            <div class="slider-control">
+                                <label for="sepia"><span>Sepia</span><span id="sepia-value-display">0%</span></label>
+                                <input type="range" id="sepia" min="0" max="100" value="0">
+                            </div>
+                    </div>
+
+
+                <div class="tool-section">
+                    <h3>Export Settings</h3>
+                    
+                    <div class="control-group">
+                        <label for="quality">Export Quality: <span id="quality-value-display">92%</span></label>
+                        <div class="slider-labels">
+                            <span>Low</span><span>Medium</span><span>High</span><span>Maximum</span>
+                        </div>
+                        <input type="range" id="quality" min="1" max="100" value="92">
+                        <p class="tooltip">Higher quality results in larger file sizes. 92% is recommended for most uses.</p>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Image Sharpening</label>
+                        <div class="button-group" id="sharpen-btns">
+                            <button data-value="0" class="active">None</button>
+                            <button data-value="0.5">Subtle</button>
+                            <button data-value="1">Medium</button>
+                            <button data-value="1.5">Strong</button>
+                            <button data-value="2">Very Strong</button>
+                            <button data-value="2.5">Maximum</button>
+                        </div>
+                         <p class="tooltip">Enhances image edges and details. Higher values create sharper images.</p>
+                    </div>
+
+
+
+                    <div class="control-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="enableOutputWidth">
+                            <label for="enableOutputWidth">Limit Output Width</label>
+                        </div>
+                        <input type="number" id="outputWidth" class="text-input" placeholder="e.g., 1920 (in pixels)" disabled>
+                        <p class="tooltip">Enable to set a maximum width for the exported image.</p>
+                    </div>
+                </div>
+
+                <div class="footer-actions">
+                    <button class="primary-btn" id="save-btn" disabled>
+                        <span class="material-symbols-outlined">download</span> Save Image
+                    </button>
+                    <button class="action-btn" id="share-btn" disabled>
+                        <span class="material-symbols-outlined">share</span> Share Image
+                    </button>
+                    <p class="footer-note" id="footer-note">Upload an image to enable download</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+</body>
+</html>
